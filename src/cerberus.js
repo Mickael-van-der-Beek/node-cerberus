@@ -1,3 +1,5 @@
+var Fuzzer = require('./fuzzer');
+
 module.exports = (function () {
 	'use strict';
 
@@ -8,6 +10,9 @@ module.exports = (function () {
 		config = config || {};
 
 	};
+
+	Fuzzer.fuzzModules();
+	// console.log(Fuzzer.generatePayloads());
 
 	return Cerberus;
 
