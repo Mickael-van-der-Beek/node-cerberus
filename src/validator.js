@@ -111,7 +111,6 @@ module.exports = (function () {
 			valid = this.validateType(schema.type, value);
 		}
 		else if (this.config.typeStrict) {
-			// throw new Error('Type missing for key: "' + key + '".');
 			throw new Error(
 				'Type missing for value ' + JSON.stringify(value) + '.'
 			);
@@ -121,7 +120,6 @@ module.exports = (function () {
 			valid &= this.validateFormats(schema.formats, value);
 		}
 		else if (this.config.formatStrict) {
-			// throw new Error('Formats missing for key: "' + key + '".');
 			throw new Error(
 				'Formats missing for value ' + JSON.stringify(value) + '.'
 			);
