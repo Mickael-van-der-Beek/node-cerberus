@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-var Validator = require('../coverage/instrument/src/Validator');
+var Validator = require('../coverage/instrument/src/validator');
 // var Validator = require('../../src/Validator');
 
 module.exports = function () {
