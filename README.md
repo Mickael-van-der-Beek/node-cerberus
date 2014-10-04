@@ -6,8 +6,8 @@
 	<a title="Build Status" href="https://travis-ci.org/Mickael-van-der-Beek/node-cerberus">
 		<img src="https://secure.travis-ci.org/Mickael-van-der-Beek/node-cerberus.svg?branch=master" />
 	</a>
-	<a title="Coverage Status" href="https://coveralls.io/r/Mickael-van-der-Beek/node-cerberus">
-		<img src="https://coveralls.io/repos/Mickael-van-der-Beek/node-cerberus/badge.png" alt="Coverage Status" />
+	<a title="Coverage Status" href="https://coveralls.io/r/Mickael-van-der-Beek/node-cerberus?branch=master">
+		<img src="https://coveralls.io/repos/Mickael-van-der-Beek/node-cerberus/badge.png?branch=master" alt="Coverage Status" />
 	</a>
 	<a title="Dependency status" href="https://david-dm.org/Mickael-van-der-Beek/node-cerberus#info=dependencies&view=table">
 		<img src="https://david-dm.org/Mickael-van-der-Beek/node-cerberus/status.png" alt="Dependency status" />
