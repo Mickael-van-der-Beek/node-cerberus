@@ -10,15 +10,15 @@ module.exports = function () {
 		testCommon();
 	});
 
-	describe('Negative common functionality tests.', function () {
+	describe('Negative common functionality tests:', function () {
 		testNegativeCommon();
 	});
 
-	describe('Optional mode tests.', function () {
+	describe('Optional mode tests:', function () {
 		testOptionalMode();
 	});
 
-	describe('Strict mode tests.', function () {
+	describe('Strict mode tests:', function () {
 		testStrictMode();
 	});
 
