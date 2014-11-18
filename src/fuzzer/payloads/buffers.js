@@ -1,7 +1,6 @@
 module.exports = [
 	new Buffer(0),
 	new Buffer(1),
-	new Buffer(10, 'binary'),
 	new Buffer('ﬂ∂∏', 'utf8'),
 	new Buffer('ﬂ∂∏', 'ucs2'),
 	new Buffer('ﬂ∂∏', 'utf16le'),

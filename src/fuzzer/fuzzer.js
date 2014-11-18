@@ -48,11 +48,11 @@ module.exports = (function () {
 
 		this.modules = {
 			crypto: crypto
-		}
+		};
 
 		this.schemas = {
 			crypto: CryptoSchema
-		}
+		};
 	}
 
 	Fuzzer.prototype.fuzzModules = function (config) {

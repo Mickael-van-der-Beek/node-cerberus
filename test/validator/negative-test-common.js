@@ -1,7 +1,6 @@
 var assert = require('assert');
 
-var Validator = require('../coverage/instrument/src/validator');
-// var Validator = require('../../src/Validator');
+var Validator = require('../coverage/instrument/src/validator/validator');
 
 module.exports = function () {
 	'use strict';
@@ -160,7 +159,7 @@ module.exports = function () {
 		}), false);
 	});
 
-	it('missing-key, array, $-selector, multi-key', function () {
+	it('missing-key, array, $ wildcard key selector, multi-key', function () {
 		assert.deepEqual(Validator.validate({
 			a: {
 				type: 'Array',

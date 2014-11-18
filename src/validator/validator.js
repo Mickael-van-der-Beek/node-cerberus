@@ -8,11 +8,13 @@ module.exports = (function () {
 
 	function Validator () {
 		this.config = {
+			wildcardKey: '$',
+
 			typeStrict: true,
 			formatStrict: true,
 			existenceStrict: true,
 
-			nullAsExistence: false,
+			nullAsExistence: true,
 			undefinedAsExistence: false
 		};
 	}
@@ -22,7 +24,7 @@ module.exports = (function () {
 
 		for (var key in (config || {})) {
 			val = config[key];
-			if (key in this.config && (typeof val === 'boolean')) {
+			if (typeof this.config[key] === typeof val) {
 				this.config[key] = val;
 			}
 		}
@@ -55,20 +57,20 @@ module.exports = (function () {
 
 		var isArray = util.isArray(object);
 
-		var diffMismatch =  Math.abs(len - Object.keys(object).length);
-		var hasDiffMismatch = !isArray && diffMismatch !== 0;
+		var diffMissmatch =  Math.abs(len - Object.keys(object).length);
+		var hasDiffMissmatch = !isArray && diffMissmatch !== 0;
 
 		while (len-- && valid) {
 			key = keys[len];
 
-			if (isArray && key === '$') {
+			if (isArray && key === this.config.wildcardKey) {
 				valid = this.loopArray(schema[key], object);
 			}
 			else if (!(key in object)) {
 				valid = schema[key].optional || !this.config.existenceStrict;
 
 				if (valid) {
-					diffMismatch -= 1;
+					diffMissmatch -= 1;
 				}
 			}
 			else if ((val = object[key]) == null) {
@@ -87,7 +89,7 @@ module.exports = (function () {
 			}
 		}
 
-		return (!hasDiffMismatch || diffMismatch === 0) && valid;
+		return (!hasDiffMissmatch || diffMissmatch === 0) && valid;
 	};
 
 	Validator.prototype.loopArray = function (schema, array) {

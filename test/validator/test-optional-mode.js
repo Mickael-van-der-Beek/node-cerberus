@@ -1,7 +1,6 @@
 var assert = require('assert');
 
-var Validator = require('../coverage/instrument/src/validator');
-// var Validator = require('../../src/Validator');
+var Validator = require('../coverage/instrument/src/validator/validator');
 
 module.exports = function () {
 	'use strict';
@@ -42,7 +41,7 @@ module.exports = function () {
 		}), true);
 	});
 
-	it('unspecified null value', function () {
+	it('unspecified undefined value', function () {
 		Validator.configure({
 			nullAsExistence: false
 		});

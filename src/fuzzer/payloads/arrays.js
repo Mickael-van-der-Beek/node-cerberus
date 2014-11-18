@@ -1,9 +1,9 @@
-var list = ['a'];
+var array = ['a'];
 
 module.exports = [
 	[],
 	[1, 'a'],
-	(list['test'] = 1) && list,
+	(array.a = 1) && array,
 	new Array(),
 	new Array(5)
 ];
