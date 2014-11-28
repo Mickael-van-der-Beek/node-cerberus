@@ -1,14 +1,14 @@
+var validator = require('./validator/validator');
+
 module.exports = (function () {
 	'use strict';
 
-	function Cerberus () {}
+	function Cerberus () {
 
-	Cerberus.prototype.init = function (config) {
+		this.validator = validator;
 
-		config = config || {};
+	}
 
-	};
-
-	return Cerberus;
+	return new Cerberus();
 
 })();
