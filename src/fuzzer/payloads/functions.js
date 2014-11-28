@@ -1,5 +1,5 @@
 module.exports = [
 	function () {},
-	new Function (),
+	// new Function (),
 	function noop() {}
 ];

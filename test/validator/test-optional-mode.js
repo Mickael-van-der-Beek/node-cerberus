@@ -7,11 +7,13 @@ module.exports = function () {
 
 	before('initialize and configure', function () {
 		Validator.configure({
-			typeStrict: true,
-			formatStrict: false,
-			existenceStrict: true,
-			nullAsExistence: false,
-			undefinedAsExistence: false
+			options: {
+				typeStrict: true,
+				formatStrict: false,
+				existenceStrict: true,
+				nullAsExistence: false,
+				undefinedAsExistence: false
+			}
 		});
 	});
 
@@ -28,7 +30,9 @@ module.exports = function () {
 
 	it('unspecified undefined value', function () {
 		Validator.configure({
-			undefinedAsExistence: false
+			options: {
+				undefinedAsExistence: false
+			}
 		});
 
 		assert.deepEqual(Validator.validate({
@@ -43,7 +47,9 @@ module.exports = function () {
 
 	it('unspecified undefined value', function () {
 		Validator.configure({
-			nullAsExistence: false
+			options: {
+				nullAsExistence: false
+			}
 		});
 
 		assert.deepEqual(Validator.validate({

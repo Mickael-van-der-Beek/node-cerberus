@@ -7,11 +7,13 @@ module.exports = function () {
 
 	before('initialize and configure', function () {
 		Validator.configure({
-			typeStrict: true,
-			formatStrict: true,
-			existenceStrict: true,
-			nullAsExistence: false,
-			undefinedAsExistence: false
+			options: {
+				typeStrict: true,
+				formatStrict: true,
+				existenceStrict: true,
+				nullAsExistence: false,
+				undefinedAsExistence: false
+			}
 		});
 	});
 
@@ -26,7 +28,9 @@ module.exports = function () {
 
 	it('non existant key with existenceStrict config set to false', function () {
 		Validator.configure({
-			existenceStrict: false
+			options: {
+				existenceStrict: false
+			}
 		});
 
 		assert.deepEqual(Validator.validate({
@@ -37,7 +41,9 @@ module.exports = function () {
 		}, {}), true);
 
 		Validator.configure({
-			existenceStrict: true
+			options: {
+				existenceStrict: true
+			}
 		});
 	});
 
@@ -54,7 +60,9 @@ module.exports = function () {
 
 	it('wrong type value typeStrict config set to false', function () {
 		Validator.configure({
-			typeStrict: false
+			options: {
+				typeStrict: false
+			}
 		});
 
 		assert.deepEqual(Validator.validate({
@@ -67,7 +75,9 @@ module.exports = function () {
 		}), true);
 
 		Validator.configure({
-			typeStrict: true
+			options: {
+				typeStrict: true
+			}
 		});
 	});
 
@@ -84,7 +94,9 @@ module.exports = function () {
 
 	it('value with wrong format formatStrict config set to false', function () {
 		Validator.configure({
-			formatStrict: false
+			options: {
+				formatStrict: false
+			}
 		});
 
 		assert.deepEqual(Validator.validate({
@@ -97,7 +109,9 @@ module.exports = function () {
 		}), true);
 
 		Validator.configure({
-			formatStrict: true
+			options: {
+				formatStrict: true
+			}
 		});
 	});
 

@@ -1,3 +1,4 @@
+var coreUtilIs = require('core-util-is');
 var util = require('util');
 
 module.exports = (function () {
@@ -5,29 +6,29 @@ module.exports = (function () {
 
 	var Types = {
 
-		Undefined: util.isUndefined,
+		Undefined: util.isUndefined || coreUtilIs.isUndefined,
 
-		Function: util.isFunction,
+		Function: util.isFunction || coreUtilIs.isFunction,
 
-		Boolean: util.isBoolean,
+		Boolean: util.isBoolean || coreUtilIs.isBoolean,
 
-		Object: util.isObject,
+		Object: util.isObject || coreUtilIs.isObject,
 
-		Number: util.isNumber,
+		Number: util.isNumber || coreUtilIs.isNumber,
 
-		String: util.isString,
+		String: util.isString || coreUtilIs.isString,
 
-		Buffer: util.isBuffer,
+		Buffer: util.isBuffer || coreUtilIs.isBuffer,
 
-		RegExp: util.isRegExp,
+		RegExp: util.isRegExp || coreUtilIs.isRegExp,
 
-		Error: util.isError,
+		Error: util.isError || coreUtilIs.isError,
 
-		Array: util.isArray,
+		Array: util.isArray || coreUtilIs.isArray,
 
-		Date: util.isDate,
+		Date: util.isDate || coreUtilIs.isDate,
 
-		Null: util.isNull
+		Null: util.isNull || coreUtilIs.isNull
 
 	};
 

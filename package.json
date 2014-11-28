@@ -1,16 +1,18 @@
 {
 	"name": "node-cerberus",
 	"private": false,
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Cerberus aka. Fluffy, is a validation and fuzzing library for Node.js core module method parameters.",
 	"main": "src/cerberus.js",
 	"scripts": {
 		"test": "grunt ci"
 	},
 	"engines": {
-		"node": "~0.11.0"
+		"node": "~0.10.0"
 	},
-	"dependencies": {},
+	"dependencies": {
+		"core-util-is": "~1.0.1"
+	},
 	"devDependencies": {
 		"mocha": "~1.21.4",
 		"grunt-cli": "~0.1.13",

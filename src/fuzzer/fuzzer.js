@@ -55,7 +55,7 @@ module.exports = (function () {
 		};
 	}
 
-	Fuzzer.prototype.fuzzModules = function (config) {
+	Fuzzer.prototype.fuzzModules = function () {
 		var schema;
 		var module;
 
@@ -124,7 +124,7 @@ module.exports = (function () {
 		function getCombinations(array, i) {
 			for (var j = 0, l = payloads[i].length; j < l; j++) {
 				var combination = array.slice(0);
-				combination.push(payloads[i][j])
+				combination.push(payloads[i][j]);
 				if (i === max) {
 					inputs.push(combination);
 				}

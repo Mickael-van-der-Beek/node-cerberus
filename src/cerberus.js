@@ -1,6 +1,3 @@
-var Validator = require('./validator/validator');
-var Fuzzer = require('./fuzzer/fuzzer');
-
 module.exports = (function () {
 	'use strict';
 

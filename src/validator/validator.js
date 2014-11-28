@@ -1,13 +1,16 @@
-var util = require('util');
-
 var formatValidators = require('./validators/formats');
 var typeValidators = require('./validators/types');
+
+var util = require('util');
 
 module.exports = (function () {
 	'use strict';
 
 	function Validator () {
-		this.config = {
+		this.typeValidators = typeValidators;
+		this.formatValidators = formatValidators;
+
+		this.options = {
 			wildcardKey: '$',
 
 			typeStrict: true,
@@ -20,14 +23,15 @@ module.exports = (function () {
 	}
 
 	Validator.prototype.configure = function (config) {
-		var val;
+		config = config || {};
 
-		for (var key in (config || {})) {
-			val = config[key];
-			if (typeof this.config[key] === typeof val) {
-				this.config[key] = val;
-			}
-		}
+		/**
+		 * I will replace the native private _extend() method in the future. 
+		 */
+
+		util._extend(this.options, config.options);
+		util._extend(this.typeValidators, config.typeValidators);
+		util._extend(this.formatValidators, config.formatValidators);
 	};
 
 	Validator.prototype.validate = function (schema, object) {
@@ -41,7 +45,7 @@ module.exports = (function () {
 	Validator.prototype.routeObject = function (schema, object) {
 		var valid = this.validateValue(schema, object);
 
-		if ((util.isObject(object) || util.isArray(object)) && schema.keys) {
+		if ((this.typeValidators.Object(object) || this.typeValidators.Array(object)) && schema.keys) {
 			valid &= this.loopObject(schema.keys, object);
 		}
 
@@ -55,7 +59,7 @@ module.exports = (function () {
 		var key;
 		var val;
 
-		var isArray = util.isArray(object);
+		var isArray = this.typeValidators.Array(object);
 
 		var diffMissmatch =  Math.abs(len - Object.keys(object).length);
 		var hasDiffMissmatch = !isArray && diffMissmatch !== 0;
@@ -63,21 +67,21 @@ module.exports = (function () {
 		while (len-- && valid) {
 			key = keys[len];
 
-			if (isArray && key === this.config.wildcardKey) {
+			if (isArray && key === this.options.wildcardKey) {
 				valid = this.loopArray(schema[key], object);
 			}
 			else if (!(key in object)) {
-				valid = schema[key].optional || !this.config.existenceStrict;
+				valid = schema[key].optional || !this.options.existenceStrict;
 
 				if (valid) {
 					diffMissmatch -= 1;
 				}
 			}
 			else if ((val = object[key]) == null) {
-				if (val === undefined && this.config.undefinedAsExistence) {
+				if (val === undefined && this.options.undefinedAsExistence) {
 					valid = true;
 				}
-				else if (val === null && this.config.nullAsExistence) {
+				else if (val === null && this.options.nullAsExistence) {
 					valid = true;
 				}
 				else {
@@ -112,7 +116,7 @@ module.exports = (function () {
 		if ('type' in schema) {
 			valid = this.validateType(schema.type, value);
 		}
-		else if (this.config.typeStrict) {
+		else if (this.options.typeStrict) {
 			throw new Error(
 				'Type missing for value ' + JSON.stringify(value) + '.'
 			);
@@ -121,7 +125,7 @@ module.exports = (function () {
 		if ('formats' in schema) {
 			valid &= this.validateFormats(schema.formats, value);
 		}
-		else if (this.config.formatStrict) {
+		else if (this.options.formatStrict) {
 			throw new Error(
 				'Formats missing for value ' + JSON.stringify(value) + '.'
 			);
@@ -136,8 +140,8 @@ module.exports = (function () {
 		if (typeof type === 'function') {
 			typeValidator = type;
 		}
-		else if (type in typeValidators) {
-			typeValidator = typeValidators[type];
+		else if (type in this.typeValidators) {
+			typeValidator = this.typeValidators[type];
 		}
 		else if (typeof type === 'string') {
 			throw new Error(
@@ -148,17 +152,25 @@ module.exports = (function () {
 			throw new TypeError('Type should be a function or a string.');
 		}
 
-		var validatorNameInitial = typeValidator.name.charCodeAt(0);
-		var valid = true;
+		/**
+		 * This part has been commented for the moment but might get
+		 * reintroduced when applied to the Node.js core API specs.
+		 * It is used to validate values thanks to their constructor. 
+		 */
 
-		if (validatorNameInitial > 64 && validatorNameInitial < 91) {
-			valid = value instanceof typeValidator;
-		}
-		else {
-			valid = typeValidator(value);
-		}
+		// var validatorNameInitial = typeValidator.name.charCodeAt(0);
+		// var valid = true;
 
-		return valid || !this.config.typeStrict;
+		// if (validatorNameInitial > 64 && validatorNameInitial < 91) {
+		// 	valid = value instanceof typeValidator;
+		// }
+		// else {
+		// 	valid = typeValidator(value);
+		// }
+
+		var valid = typeValidator(value);
+
+		return valid || !this.options.typeStrict;
 	};
 
 	Validator.prototype.validateFormats = function (formats, value) {
@@ -172,7 +184,7 @@ module.exports = (function () {
 			valid = this.validateFormat(format, value);
 		}
 
-		return valid || !this.config.formatStrict;
+		return valid || !this.options.formatStrict;
 	};
 
 	Validator.prototype.validateFormat = function (format, value) {
@@ -181,8 +193,8 @@ module.exports = (function () {
 		if (typeof format === 'function') {
 			formatValidator = format;
 		}
-		else if (format in formatValidators) {
-			formatValidator = formatValidators[format];
+		else if (format in this.formatValidators) {
+			formatValidator = this.formatValidators[format];
 		}
 		else if (typeof format === 'string') {
 			throw new Error(

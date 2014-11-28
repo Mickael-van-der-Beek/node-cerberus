@@ -7,11 +7,13 @@ module.exports = function () {
 
 	before('initialize and configure', function () {
 		Validator.configure({
-			typeStrict: true,
-			formatStrict: false,
-			existenceStrict: true,
-			nullAsExistence: false,
-			undefinedAsExistence: false
+			options: {
+				typeStrict: true,
+				formatStrict: false,
+				existenceStrict: true,
+				nullAsExistence: false,
+				undefinedAsExistence: false
+			}
 		});
 	});
 
