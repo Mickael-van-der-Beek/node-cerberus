@@ -181,10 +181,10 @@ module.exports = (function () {
 		while (len-- && valid) {
 			format = formats[len];
 
-			valid = this.validateFormat(format, value);
+			valid &= this.validateFormat(format, value);
 		}
 
-		return valid || !this.options.formatStrict;
+		return !!valid || !this.options.formatStrict;
 	};
 
 	Validator.prototype.validateFormat = function (format, value) {
@@ -201,13 +201,12 @@ module.exports = (function () {
 				'No validators for format: "' + JSON.stringify(format) + '".'
 			);
 		}
-		else {
-			throw new TypeError('Format should be a function or a string.');
+		else if (Object.prototype.toString.call(format) === '[object Object]') {
+			var _format = Object.keys(format)[0];
+			return this.validateFormat(_format, [].concat(format[_format], value));
 		}
-
-		if (typeof formatValidator === 'object') {
-			format = Object.keys(formatValidator)[0];
-			return this.validateFormat(format, [].concat(formatValidator[format], value));
+		else if (typeof format !== 'object') {
+			throw new TypeError('Format should be a function, string or object.');
 		}
 
 		if (Array.isArray(value) === false) {
