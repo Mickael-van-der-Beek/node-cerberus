@@ -17,8 +17,21 @@ module.exports = function () {
 		});
 	});
 
+	it('one key underloading', function () {
+		assert.strictEqual(Validator.validate({
+			a: {
+				type: 'String'
+			},
+			b: {
+				type: 'String'
+			}
+		}, {
+			a: 'hello world'
+		}), false);
+	});
+
 	it('one key overloading', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String'
 			},
@@ -33,7 +46,7 @@ module.exports = function () {
 	});
 
 	it('unexistant parent-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Object',
 				keys: {
@@ -53,7 +66,7 @@ module.exports = function () {
 	});
 
 	it('missing-key, nested-key, symetric, multi-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Object',
 				keys: {
@@ -80,7 +93,7 @@ module.exports = function () {
 	});
 
 	it('missing-key, nested-key, asymetric, multi-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Object',
 				keys: {
@@ -106,7 +119,7 @@ module.exports = function () {
 	});
 
 	it('missing-key, array, numeric-selector, single-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Array',
 				keys: {
@@ -121,7 +134,7 @@ module.exports = function () {
 	});
 
 	it('missing-key, array, numeric-selector, multi-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Array',
 				keys: {
@@ -141,7 +154,7 @@ module.exports = function () {
 	});
 
 	it('missing-key, array, numeric-selector, multi-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Array',
 				keys: {
@@ -162,7 +175,7 @@ module.exports = function () {
 	});
 
 	it('missing-key, array, $ wildcard key selector, multi-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Array',
 				keys: {

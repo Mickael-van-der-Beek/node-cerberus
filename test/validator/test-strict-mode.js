@@ -18,7 +18,7 @@ module.exports = function () {
 	});
 
 	it('non existant key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String',
 				formats: ['notEmpty', 'lenEquals10']
@@ -33,7 +33,7 @@ module.exports = function () {
 			}
 		});
 
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String',
 				formats: ['notEmpty', 'lenEquals10']
@@ -48,7 +48,7 @@ module.exports = function () {
 	});
 
 	it('wrong type value', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String',
 				formats: ['notEmpty', 'lenEquals10']
@@ -65,7 +65,7 @@ module.exports = function () {
 			}
 		});
 
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String',
 				formats: []
@@ -82,7 +82,7 @@ module.exports = function () {
 	});
 
 	it('value with wrong format', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String',
 				formats: ['notEmpty', 'lenEquals10']
@@ -99,7 +99,7 @@ module.exports = function () {
 			}
 		});
 
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String',
 				formats: ['notEmpty', 'lenEquals10']

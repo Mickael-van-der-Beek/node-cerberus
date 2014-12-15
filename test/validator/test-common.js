@@ -18,7 +18,7 @@ module.exports = function () {
 	});
 
 	it('single-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String',
 				formats: ['notEmpty', 'lenEquals10']
@@ -29,7 +29,7 @@ module.exports = function () {
 	});
 
 	it('multi-key, single-type', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String'
 			},
@@ -43,7 +43,7 @@ module.exports = function () {
 	});
 
 	it('multi-key, multi-type', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String'
 			},
@@ -57,7 +57,7 @@ module.exports = function () {
 	});
 
 	it('nested-key, single-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Object',
 				keys: {
@@ -81,7 +81,7 @@ module.exports = function () {
 	});
 
 	it('nested-key, symetric, multi-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Object',
 				keys: {
@@ -109,7 +109,7 @@ module.exports = function () {
 	});
 
 	it('nested-key, asymetric, multi-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Object',
 				keys: {
@@ -137,7 +137,7 @@ module.exports = function () {
 	});
 
 	it('array', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Array'
 			}
@@ -149,7 +149,7 @@ module.exports = function () {
 	});
 
 	it('array, numeric-selector, single-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Array',
 				keys: {
@@ -166,7 +166,7 @@ module.exports = function () {
 	});
 
 	it('array, numeric-selector, multi-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Array',
 				keys: {
@@ -187,7 +187,7 @@ module.exports = function () {
 	});
 
 	it('array, $ wildcard key selector, multi-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Array',
 				keys: {
@@ -205,7 +205,7 @@ module.exports = function () {
 	});
 
 	it('array, embedded', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Array',
 				keys: {
@@ -222,7 +222,7 @@ module.exports = function () {
 	});
 
 	it('array, embedded, multi-occurence, single-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Array',
 				keys: {
@@ -246,7 +246,7 @@ module.exports = function () {
 	});
 
 	it('array, embedded, multi-occurence, multi-key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Array',
 				keys: {
@@ -275,7 +275,7 @@ module.exports = function () {
 	});
 
 	it('array, embedded, nested, multi-occurence', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Array',
 				keys: {

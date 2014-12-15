@@ -205,7 +205,16 @@ module.exports = (function () {
 			throw new TypeError('Format should be a function or a string.');
 		}
 
-		return formatValidator(value);
+		if (typeof formatValidator === 'object') {
+			format = Object.keys(formatValidator)[0];
+			return this.validateFormat(format, [].concat(formatValidator[format], value));
+		}
+
+		if (Array.isArray(value) === false) {
+			value = [value];
+		}
+
+		return formatValidator.apply(this.formatValidators, value);
 	};
 
 	return new Validator();

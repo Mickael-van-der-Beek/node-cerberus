@@ -18,7 +18,7 @@ module.exports = function () {
 	});
 
 	it('specified value', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String',
 				optional: true
@@ -35,7 +35,7 @@ module.exports = function () {
 			}
 		});
 
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String',
 				optional: true
@@ -52,7 +52,7 @@ module.exports = function () {
 			}
 		});
 
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String',
 				optional: true
@@ -63,7 +63,7 @@ module.exports = function () {
 	});
 
 	it('unspecified key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'String',
 				optional: true
@@ -72,7 +72,7 @@ module.exports = function () {
 	});
 
 	it('nested, unspecified parent key', function () {
-		assert.deepEqual(Validator.validate({
+		assert.strictEqual(Validator.validate({
 			a: {
 				type: 'Object',
 				optional: true,

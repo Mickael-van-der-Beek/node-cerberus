@@ -1,7 +1,7 @@
 {
 	"name": "node-cerberus",
 	"private": false,
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "Cerberus aka. Fluffy, is a validation and fuzzing library for Node.js core module method parameters.",
 	"main": "src/cerberus.js",
 	"scripts": {
