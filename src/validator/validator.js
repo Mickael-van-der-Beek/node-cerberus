@@ -125,7 +125,11 @@ module.exports = (function () {
 		if ('formats' in schema) {
 			valid &= this.validateFormats(schema.formats, value);
 		}
-		else if (this.options.formatStrict) {
+		/**
+		 * Temporary hack.
+		 * I'll have to think about format specifications in arrays and objects.
+		 */
+		else if (this.options.formatStrict && schema.type !== 'Array' && schema.type !== 'Object') {
 			throw new Error(
 				'Formats missing for value ' + JSON.stringify(value) + '.'
 			);
