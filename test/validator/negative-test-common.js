@@ -191,4 +191,15 @@ module.exports = function () {
 		}), true);
 	});
 
+	it('type check should fail before format validation is called', function () {
+		assert.strictEqual(Validator.validate({
+			a: {
+				type: 'String',
+				formats: ['notEmpty']
+			}
+		}, {
+			a: 1
+		}), false);
+	});
+
 };

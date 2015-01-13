@@ -122,6 +122,10 @@ module.exports = (function () {
 			);
 		}
 
+		if (valid === false) {
+			return valid;
+		}
+
 		if ('formats' in schema) {
 			valid &= this.validateFormats(schema.formats, value);
 		}

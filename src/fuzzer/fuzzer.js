@@ -1,6 +1,6 @@
-var crypto = require('crypto');
+var http = require('http');
 
-var Validator = require('./validator');
+var Validator = require('../validator/validator');
 
 var Functions = require('./payloads/functions');
 var Booleans = require('./payloads/booleans');
@@ -13,7 +13,9 @@ var Errors = require('./payloads/errors');
 var Arrays = require('./payloads/arrays');
 var Dates = require('./payloads/dates');
 
-var CryptoSchema = require('./schemas/core/crypto');
+var HttpSamples = require('../samples/core/http');
+
+var HttpSchema = require('../schemas/core/http');
 
 module.exports = (function () {
 	'use strict';
@@ -47,96 +49,145 @@ module.exports = (function () {
 		);
 
 		this.modules = {
-			crypto: crypto
+			http: http
+		};
+
+		this.samples = {
+			http: HttpSamples
 		};
 
 		this.schemas = {
-			crypto: CryptoSchema
+			http: HttpSchema
 		};
+
+		this.mutationChance = 0.05;
+		this.turns = 10000;
 	}
 
 	Fuzzer.prototype.fuzzModules = function () {
-		var schema;
+		var schemas;
+		var samples;
 		var module;
 
-		for(var moduleName in this.schemas) {
-			schema = this.schemas[moduleName];
+		for (var moduleName in this.schemas) {
+			schemas = this.schemas[moduleName];
 			module = this.modules[moduleName];
+			samples = this.samples[moduleName];
 
-			this.fuzzModule(schema, module);
+			this.fuzzModule(schemas, samples, module);
 		}
 	};
 
-	Fuzzer.prototype.fuzzModule = function (schema, module) {
-		for(var methodName in schema) {
-			this.fuzzMethod(schema, module, methodName);
+	Fuzzer.prototype.fuzzModule = function (schemas, samples, module) {
+		var schema;
+		var sample;
+
+		for (var methodName in schemas) {
+			schema = schemas[methodName];
+			sample = samples[methodName];
+
+			this.fuzzMethod(schema, sample, module, methodName);
 		}
 	};
 
-	Fuzzer.prototype.fuzzMethod = function (schema, module, methodName) {
-		var outputSchema = schema[methodName].output;
-		var inputSchema = schema[methodName].input;
+	Fuzzer.prototype.fuzzMethod = function (schema, sample, module, methodName) {
+		var errorMap = {};
+		var callback;
+		var payloads;
+		var results;
 
-		var overload = [];
-		for(var i = 0; i < inputSchema.length; i++) {
-			overload.push(this.payloads);
-		}
+		for (var i = 0; i < this.turns; i++) {
+			payloads = this.generatePayloads(schema, sample);
 
-		var payloads = this.generatePayloads(overload);
-		var len = payloads.length;
-		var output;
-		var input;
+			callback = (function () {
+				return function (e) {
+					if (e instanceof Error && !(e in errorMap)) {
+						console.log('(', i, ') ERROR:', e);
+						// errorMap[e] = {
+						// 	payloads: payloads,
+						// 	error: e,
+						// 	stack: e.stack
+						// };
 
-		var errors = {};
-
-		while(len--) {
-			input = payloads[len];
-
-			console.log('1 INPUT:', input);
-			console.log('1 NAME:', methodName);
+						errorMap[e] = payloads[0];
+					}
+				};
+			})();
 
 			try {
-				output = module[methodName].apply(module, input);
+				// console.log('(', i, ') INPUT:', payloads);
+				payloads.push(callback);
+				results = module[methodName].apply(module, payloads);
+				results.on('error', callback);
+				results.on('close', callback);
+				results.on('end', callback);
+				results.on('finish', callback);
+				results.end();
 			}
-			catch(e) {
-				output = e;
+			catch (e) {
+				results = e;
 			}
 
-			if(output instanceof Error) {
-				if(!errors[output]) {
-					errors[output] = output;
-					console.log('\n---------------------');
-					console.log('1 OUTPUT:', output);
-					console.log('1 ERROR:', input);
+			if (results instanceof Error) {
+				if (!(results in errorMap)) {
+					// errorMap[results] = {
+					// 	payloads: payloads[0],
+					// 	error: results,
+					// 	stack: results.stack
+					// };
+					errorMap[results] = payloads[0];
+
+					// console.log('(', i, ') ERROR:', results);
+					// console.log('(', i, ') ERROR:', results.stack);
+					// console.log('(', i, ') INPUT:', payloads);
 				}
 			}
-			else if(!Validator.validate(outputSchema, output)) {
-				console.log('\n---------------------');
-				console.log('2 OUTPUT:', output);
-				console.log('2 CORRUPT:', input);
+			else {
+				// console.log('(', i, ') CORRUPT:', results);
+				// console.log('(', i, ') INPUT:', payloads);
 			}
 		}
+
+		console.log(new Array(81).join('-'));
+		console.log(errorMap);
 	};
 
-	Fuzzer.prototype.generatePayloads = function (payloads) {
-		var inputs = [];
-		var max = payloads.length - 1;
-		function getCombinations(array, i) {
-			for (var j = 0, l = payloads[i].length; j < l; j++) {
-				var combination = array.slice(0);
-				combination.push(payloads[i][j]);
-				if (i === max) {
-					inputs.push(combination);
-				}
-				else {
-					getCombinations(combination, i + 1);
-				}
+	Fuzzer.prototype.generatePayloads = function (schema, sample) {
+		var hasMutated = false;
+		var payloads = Array.isArray(schema) ? [] : {};
+		var keys = Object.keys(schema);
+		var len = keys.length;
+		var subschema;
+		var subsample;
+		var key;
+
+		while (len--) {
+			key = keys[len];
+			subschema = schema[key];
+			subsample = sample[key];
+
+			if ('keys' in subschema) {
+				payloads[key] = this.generatePayloads(subschema.keys, subsample);
+			}
+			else if (hasMutated === false && Math.random() <= this.mutationChance) {
+				hasMutated = true;
+				payloads[key] = this.generatePayload(subschema);
+			}
+			else  if (key in sample) {
+				payloads[key] = subsample;
 			}
 		}
-		getCombinations([], 0);
-		return inputs;
+
+		return payloads;
 	};
 
-	return new Fuzzer();
+	Fuzzer.prototype.generatePayload = function (schema) {
+		var random = Math.floor(Math.random() * ((this.payloads.length - 1) + 1));
+		var payload = this.payloads[random];
 
+		return Validator.validate(payload) ? this.generatePayload(schema) : payload;
+	};
+
+	var fuzzer = new Fuzzer();
+	fuzzer.fuzzModules();
 })();
